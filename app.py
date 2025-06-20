@@ -36,22 +36,34 @@ def criar_usuario(usuarios):
 
     if usuario:
         limpar_tela()
-        print("\n❌ O CPF JÁ ESTÁ CADASTRADO!")
+        print("❌ O CPF JÁ ESTÁ CADASTRADO!")
         return
 
     nome = input("🔍 INFORME SEU NOME COMPLETO: ")
     data_nascimento = input("🔍 INFORME A DATA DE NASCIMENTO (DD-MM-AAAA): ")
-    endereco = input("🔍 INFORME O ENDEREÇO (logradouro, nro - bairro - cidade/sigla estado): ")
+    endereco = input("🔍 INFORME O ENDEREÇO (LOGRADOURO, NÚMERO - BAIRRO - CIDADE/SIGLA DO ESTADO): ")
 
     usuarios.append({"nome": nome, "data_nascimento": data_nascimento, "cpf": cpf, "endereco": endereco})
 
     limpar_tela()
-    print("✅ USUÁRIA CRIADO COM SUCESSO!")
+    print("✅ USUÁRIO CRIADO COM SUCESSO!")
+
+def criar_conta(agencia, numero_conta, usuarios):
+    cpf = input("\n🔍 INFORME O CPF DO USUÁRIO: ")
+    usuario = filtrar_usuario(cpf, usuarios)
+
+    if usuario:
+        limpar_tela()
+        print("\n✅ CONTA CRIADA COM SUCESSO!")
+        return {"agencia": agencia, "numero_conta": numero_conta, "usuario": usuario}
+
+    limpar_tela()
+    print("\n❌ USUÁRIO NÃO ENCONTRADO, FLUXO DE CRIAÇÃO DE CONTA ENCERRADO!")
     
 def principal():
 
     limpar_tela()
-    # Variáveis e listas do sistemas.
+    # Dicionário de variáveis e listas do sistemas.
     dados = {
     "LIMITE_SAQUES": 3,
     "AGENCIA": "0001",   
@@ -75,7 +87,12 @@ def principal():
         elif operacões == "3":
             pass
         elif operacões == "4":
-            pass
+            numero_conta = len(dados["contas"]) + 1
+            conta = criar_conta(dados["AGENCIA"], numero_conta, dados["usuarios"])
+
+            if conta:
+                dados["contas"].append(conta)
+
         elif operacões == "5":
             pass
         elif operacões == "6":
