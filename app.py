@@ -6,14 +6,9 @@ def limpar_tela():
 
 # Função menu.
 def menu():
-    # Variáveis de design.
-    linhas = "=" * 42
-    titulo = " PYTHON ".center(42, "=")
+    
     # Variável do menu.
     menu = f"""
-    {linhas}
-    {titulo}
-    {linhas}
     [1]\t DEPOSITAR
     [2]\t SACAR
     [3]\t EXTRATO
@@ -21,10 +16,15 @@ def menu():
     [5]\t LISTAR CONTAS
     [6]\t NOVO USUÁRIO
     [7]\t SAIR
-    {linhas}
-    ESCOLHA UMA OPERAÇÃO => """
+    """
+    # Variáveis de design.
+    print("=" * 42)
+    print(" PYTHON ".center(42, "="))
+    print("=" * 42)
 
-    return input(menu)
+    print(menu)
+
+    print("=" * 42)
 
 def filtrar_usuario(cpf, usuarios):
     usuarios_filtrados = [usuario for usuario in usuarios if usuario["cpf"] == cpf]
@@ -36,7 +36,7 @@ def criar_usuario(usuarios):
 
     if usuario:
         limpar_tela()
-        print("❌ O CPF JÁ ESTÁ CADASTRADO!")
+        print("\n❌ O CPF JÁ ESTÁ CADASTRADO!\n")
         return
 
     nome = input("🔍 INFORME SEU NOME COMPLETO: ")
@@ -46,7 +46,7 @@ def criar_usuario(usuarios):
     usuarios.append({"nome": nome, "data_nascimento": data_nascimento, "cpf": cpf, "endereco": endereco})
 
     limpar_tela()
-    print("✅ USUÁRIO CRIADO COM SUCESSO!")
+    print("\n✅ USUÁRIO CRIADO COM SUCESSO!\n")
 
 def criar_conta(agencia, numero_conta, usuarios):
     cpf = input("\n🔍 INFORME O CPF DO USUÁRIO: ")
@@ -54,11 +54,22 @@ def criar_conta(agencia, numero_conta, usuarios):
 
     if usuario:
         limpar_tela()
-        print("\n✅ CONTA CRIADA COM SUCESSO!")
+        print("\n✅ CONTA CRIADA COM SUCESSO!\n")
         return {"agencia": agencia, "numero_conta": numero_conta, "usuario": usuario}
 
     limpar_tela()
-    print("\n❌ USUÁRIO NÃO ENCONTRADO, FLUXO DE CRIAÇÃO DE CONTA ENCERRADO!")
+    print("\n❌ USUÁRIO NÃO ENCONTRADO, FLUXO DE CRIAÇÃO DE CONTA ENCERRADO!\n")
+
+def listar_contas(contas):
+    limpar_tela()
+    for conta in contas:
+        linha = f"""\
+        AGÊNCIA:\t{conta['agencia']}
+        C/C:\t\t{conta['numero_conta']}
+        TITULAR:\t{conta['usuario']['nome'].upper()}
+        """
+        print("=" * 42)
+        print(linha)    
     
 def principal():
 
@@ -77,8 +88,8 @@ def principal():
 
     # Estrutura que centraliza o sistema.
     while True:
-
-        operacões = menu()
+        menu()
+        operacões = input("\n🔍 ESCOLHA UMA OPERAÇÃO => ")
 
         if operacões == "1":
             pass
@@ -94,7 +105,8 @@ def principal():
                 dados["contas"].append(conta)
 
         elif operacões == "5":
-            pass
+            listar_contas(dados["contas"])
+
         elif operacões == "6":
             criar_usuario(dados["usuarios"])
 
@@ -104,6 +116,6 @@ def principal():
             break
         else:
             limpar_tela()
-            print("❌ OPERAÇÃO INVÁLIDA, SELECIONE NOVAMENTE A OPERAÇÃO DESEJADA.")
+            print("\n❌ OPERAÇÃO INVÁLIDA, SELECIONE NOVAMENTE A OPERAÇÃO DESEJADA.\n")
 
 principal()
