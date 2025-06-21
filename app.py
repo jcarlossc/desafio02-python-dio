@@ -21,9 +21,7 @@ def menu():
     print("=" * 42)
     print(" PYTHON ".center(42, "="))
     print("=" * 42)
-
     print(menu)
-
     print("=" * 42)
 
 def filtrar_usuario(cpf, usuarios):
@@ -60,16 +58,35 @@ def criar_conta(agencia, numero_conta, usuarios):
     limpar_tela()
     print("\n❌ USUÁRIO NÃO ENCONTRADO, FLUXO DE CRIAÇÃO DE CONTA ENCERRADO!\n")
 
+def depositar(saldo, valor, extrato, /):
+    if valor > 0:
+        saldo += valor
+        extrato += f"DEPÓSITO:\tR$ {valor:.2f}\n"
+        limpar_tela()
+        print("\n✅ Depósito realizado com sucesso!\n")
+    else:
+        print("\n❌ Operação falhou! O valor informado é inválido.\n")
+
+    return saldo, extrato    
+
 def listar_contas(contas):
     limpar_tela()
-    for conta in contas:
-        linha = f"""\
-        AGÊNCIA:\t{conta['agencia']}
-        C/C:\t\t{conta['numero_conta']}
-        TITULAR:\t{conta['usuario']['nome'].upper()}
-        """
-        print("=" * 42)
-        print(linha)    
+    if contas:
+        for conta in contas:
+            print(" CONTAS ".center(42, "="))
+            print("AGÊNCIA:\t", conta['agencia'])
+            print("C/C:\t\t", conta['numero_conta'])
+            print("TITULAR:\t", conta['usuario']['nome'].upper())
+              
+    else:
+        limpar_tela()
+        print("\n❌ NÃO EXISTE CONTA CADASTRADA.\n")    
+
+def exibir_extrato(saldo, /, *, extrato):
+    limpar_tela()
+    print("\n================ EXTRATO ================")
+    print("NÃO FORAM REALIZADAS MOVIMENTAÇÕES." if not extrato else extrato)
+    print(f"\nSALDO:\t\tR$ {saldo:.2f}")           
     
 def principal():
 
@@ -92,11 +109,15 @@ def principal():
         operacões = input("\n🔍 ESCOLHA UMA OPERAÇÃO => ")
 
         if operacões == "1":
-            pass
+            valor = float(input("\n🔍 INFORME O VALOR DO DEPÓSITO: "))
+
+            dados["saldo"], dados["extrato"] = depositar(dados["saldo"], valor, dados["extrato"])
+
         elif operacões == "2":
             pass
         elif operacões == "3":
-            pass
+            exibir_extrato(dados["saldo"], extrato=dados["extrato"])
+
         elif operacões == "4":
             numero_conta = len(dados["contas"]) + 1
             conta = criar_conta(dados["AGENCIA"], numero_conta, dados["usuarios"])
@@ -112,7 +133,7 @@ def principal():
 
         elif operacões == "7":
             limpar_tela()
-            print(f"\nOBRIGADO, {dados["usuarios"][0]["nome"].upper()}. ATÉ A PRÓXIMA!\n")
+            print(f"\nOBRIGADO. ATÉ A PRÓXIMA!\n")
             break
         else:
             limpar_tela()
