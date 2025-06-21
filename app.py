@@ -58,6 +58,17 @@ def criar_conta(agencia, numero_conta, usuarios):
     limpar_tela()
     print("\n❌ USUÁRIO NÃO ENCONTRADO, FLUXO DE CRIAÇÃO DE CONTA ENCERRADO!\n")
 
+def depositar(saldo, valor, extrato, /):
+    if valor > 0:
+        saldo += valor
+        extrato += f"DEPÓSITO:\tR$ {valor:.2f}\n"
+        limpar_tela()
+        print("\n✅ Depósito realizado com sucesso!\n")
+    else:
+        print("\n❌ Operação falhou! O valor informado é inválido.\n")
+
+    return saldo, extrato    
+
 def listar_contas(contas):
     limpar_tela()
     if contas:
@@ -74,8 +85,8 @@ def listar_contas(contas):
 def exibir_extrato(saldo, /, *, extrato):
     limpar_tela()
     print("\n================ EXTRATO ================")
-    print("Não foram realizadas movimentações." if not extrato else extrato)
-    print(f"\nSaldo:\t\tR$ {saldo:.2f}")           
+    print("NÃO FORAM REALIZADAS MOVIMENTAÇÕES." if not extrato else extrato)
+    print(f"\nSALDO:\t\tR$ {saldo:.2f}")           
     
 def principal():
 
@@ -98,7 +109,10 @@ def principal():
         operacões = input("\n🔍 ESCOLHA UMA OPERAÇÃO => ")
 
         if operacões == "1":
-            pass
+            valor = float(input("\n🔍 INFORME O VALOR DO DEPÓSITO: "))
+
+            dados["saldo"], dados["extrato"] = depositar(dados["saldo"], valor, dados["extrato"])
+
         elif operacões == "2":
             pass
         elif operacões == "3":
