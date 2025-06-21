@@ -63,11 +63,40 @@ def depositar(saldo, valor, extrato, /):
         saldo += valor
         extrato += f"DEPÓSITO:\tR$ {valor:.2f}\n"
         limpar_tela()
-        print("\n✅ Depósito realizado com sucesso!\n")
+        print("\n✅ DEPÓSITO REALIZADO COM SUCESSO!\n")
     else:
-        print("\n❌ Operação falhou! O valor informado é inválido.\n")
+        print("\n❌ OPERAÇÃO FALHOU! O VALOR INFORMADO É INVÁLIDO.\n")
 
     return saldo, extrato    
+
+def sacar(*, saldo, valor, extrato, valor_limite, numero_saques, limite_saques):
+    excedeu_saldo = valor > saldo
+    excedeu_limite = valor > valor_limite
+    excedeu_saques = numero_saques >= limite_saques
+
+    if excedeu_saldo:
+        limpar_tela()
+        print("\n❌ OPERAÇÃO FALHOU! VOCÊ NÃO TEM SALDO SUFICIENTE.\n")
+
+    elif excedeu_limite:
+        limpar_tela()
+        print("\n❌ OPERAÇÃO FALHOU! O VALOR DO SAQUE EXCEDE O LIMITE.\n")
+
+    elif excedeu_saques:
+        limpar_tela()
+        print("\n❌ OPERAÇÃO FALHOU! NÚMERO MÁXIMO DE SAQUES EXCEDIDO.\n")
+
+    elif valor > 0:
+        saldo -= valor
+        extrato += f"Saque:\t\tR$ {valor:.2f}\n"
+        numero_saques += 1
+        limpar_tela()
+        print("\n✅ SAQUE REALIZADO COM SUCESSO!\n")
+
+    else:
+        print("\n❌ OPERAÇÃO FALHOU! O VALOR INFORMADO É INVÁLIDO.")
+
+    return saldo, extrato, numero_saques
 
 def listar_contas(contas):
     limpar_tela()
@@ -114,7 +143,17 @@ def principal():
             dados["saldo"], dados["extrato"] = depositar(dados["saldo"], valor, dados["extrato"])
 
         elif operacões == "2":
-            pass
+            valor = float(input("\n🔍 INFORME O VALOR DO SAQUE: "))
+
+            dados["saldo"], dados["extrato"], dados["numero_saques"] = sacar(
+                saldo = dados["saldo"],
+                valor = valor,
+                extrato = dados["extrato"],
+                valor_limite = dados["limite"],
+                numero_saques = dados["numero_saques"],
+                limite_saques = dados["LIMITE_SAQUES"],
+            )
+
         elif operacões == "3":
             exibir_extrato(dados["saldo"], extrato=dados["extrato"])
 
