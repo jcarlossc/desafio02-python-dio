@@ -1,13 +1,9 @@
 import os
 
-# Função para limpar tela.
 def limpar_tela():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-# Função menu.
 def menu():
-    
-    # Variável do menu.
     menu = f"""
     [1]\t DEPOSITAR
     [2]\t SACAR
@@ -17,7 +13,7 @@ def menu():
     [6]\t NOVO USUÁRIO
     [7]\t SAIR
     """
-    # Variáveis de design.
+
     print("=" * 42)
     print(" PYTHON ".center(42, "="))
     print("=" * 42)
@@ -120,7 +116,7 @@ def exibir_extrato(saldo, /, *, extrato):
 def principal():
 
     limpar_tela()
-    # Dicionário de variáveis e listas do sistemas.
+
     dados = {
     "LIMITE_SAQUES": 3,
     "AGENCIA": "0001",   
@@ -132,18 +128,29 @@ def principal():
     "contas": []
     }
 
-    # Estrutura que centraliza o sistema.
     while True:
         menu()
         operacões = input("\n🔍 ESCOLHA UMA OPERAÇÃO => ")
 
         if operacões == "1":
-            valor = float(input("\n🔍 INFORME O VALOR DO DEPÓSITO: "))
+            try:
+                valor = float(input("\n🔍 INFORME O VALOR DO DEPÓSITO: "))
+
+            except ValueError:
+                limpar_tela()
+                print("\n❌ OPERAÇÃO DE DEPÓSITO FALHOU! VALOR INVÁLIDO.\n")
+                continue     
 
             dados["saldo"], dados["extrato"] = depositar(dados["saldo"], valor, dados["extrato"])
 
         elif operacões == "2":
-            valor = float(input("\n🔍 INFORME O VALOR DO SAQUE: "))
+            try:
+                valor = float(input("\n🔍 INFORME O VALOR DO SAQUE: "))
+
+            except ValueError:
+                limpar_tela()
+                print("\n❌ OPERAÇÃO DE SAQUE FALHOU! VALOR INVÁLIDO.\n")
+                continue 
 
             dados["saldo"], dados["extrato"], dados["numero_saques"] = sacar(
                 saldo = dados["saldo"],
